@@ -32,6 +32,10 @@
         devenv.shells.default = {
           name = "yard-search";
 
+          packages = with pkgs; [
+            nodePackages.typescript-language-server
+          ];
+
           services.meilisearch = {
             enable = true;
           };
