@@ -33,12 +33,17 @@
           name = "yard-search";
 
           packages = with pkgs; [
-            cargo-leptos
-            cargo-generate
+	    openai-whisper
+	    openai-whisper-cpp
+	    yt-dlp
+	    ffmpeg
+
+	    jq
           ];
 
           services.meilisearch = {
             enable = true;
+	    environment = "development";
           };
         };
       };
