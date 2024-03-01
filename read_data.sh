@@ -14,7 +14,7 @@ for filename in *.wav.vtt; do
 	chapter=${filename%.*.*}
 	chapter=${chapter#* }
 	echo "$a"
-	data=$(jq -Rs "{ trans: ., id: \"$1-$number\", \"chapter\": \"$chapter\", \"youtube_id\": \"$1\", \"uploaded\": \"2024-02-23\" }" "$filename")
+	data=$(jq -Rs "{ trans: ., id: \"$1-$number\", \"chapter\": \"$chapter\", \"episode\": 136, \"youtube_id\": \"$1\", \"uploaded\": \"2024-02-23\" }" "$filename")
 
 	echo "$data" > data.json
 
