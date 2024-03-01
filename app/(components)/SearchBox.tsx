@@ -10,7 +10,7 @@ export default function SearchBox() {
 
 	const isSearchStalled = status === 'stalled';
 
-	function setQuery(newQuery) {
+	function setQuery(newQuery: string) {
 		setInputValue(newQuery);
 
 		refine(newQuery);
