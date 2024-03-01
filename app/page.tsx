@@ -5,10 +5,12 @@ import { instantMeiliSearch } from '@meilisearch/instant-meilisearch';
 import { XMarkIcon, MagnifyingGlassIcon, FunnelIcon, BarsArrowDownIcon } from '@heroicons/react/24/solid';
 import SearchBox from "./(components)/SearchBox";
 import SortBy from './(components)/SortBy';
+import { env } from "@/env";
+
 
 const { searchClient } = instantMeiliSearch(
-	'http://127.0.0.1:7700',
-	'HWoz-31otPLUyXZmEfFDWpC3osm3XTW0Ebv3GTj5yrg',
+	env.NEXT_PUBLIC_MEILISEARCH_URL,
+	env.NEXT_PUBLIC_MEILISEARCH_KEY,
 	{
 		meiliSearchParams: {
 			attributesToRetrieve: [

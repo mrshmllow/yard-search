@@ -32,6 +32,12 @@
         devenv.shells.default = {
           name = "yard-search";
 
+          env = {
+            NEXT_PUBLIC_MEILISEARCH_URL = "http://127.0.0.1:7700";
+            # Development key
+            NEXT_PUBLIC_MEILISEARCH_KEY = "HWoz-31otPLUyXZmEfFDWpC3osm3XTW0Ebv3GTj5yrg";
+          };
+
           packages = with pkgs; [
 	    openai-whisper
 	    openai-whisper-cpp
