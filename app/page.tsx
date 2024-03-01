@@ -1,6 +1,6 @@
 "use client";
 
-import { InstantSearch, Hits, Highlight, HitsProps, } from 'react-instantsearch';
+import { InstantSearch, Hits, Highlight, HitsProps, InfiniteHits, } from 'react-instantsearch';
 import { instantMeiliSearch } from '@meilisearch/instant-meilisearch';
 import { XMarkIcon, MagnifyingGlassIcon, FunnelIcon, BarsArrowDownIcon } from '@heroicons/react/24/solid';
 import SearchBox from "./(components)/SearchBox";
@@ -21,7 +21,7 @@ const { searchClient } = instantMeiliSearch(
 				"episode",
 			],
 			attributesToCrop: ["trans"],
-			cropLength: 40
+			cropLength: 60
 		},
 	}
 );
@@ -103,9 +103,12 @@ export default function Home() {
 						</div>
 					</div>
 
-					<Hits hitComponent={Hit} classNames={{
-						list: "flex gap-2 flex-col"
-					}} />
+					<InfiniteHits hitComponent={Hit} classNames={{
+						root: "flex flex-col",
+						list: "flex gap-2 flex-col",
+						loadMore: "bg-white bg-opacity-10 text-white rounded-lg px-4 h-10 my-4 w-full place-self-center md:w-fit",
+						disabledLoadMore: "hidden"
+					}} showPrevious={false} />
 				</div>
 			</InstantSearch>
 		</main>
