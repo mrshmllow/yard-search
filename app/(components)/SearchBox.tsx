@@ -6,7 +6,7 @@ export default function SearchBox() {
 	const { query, refine } = useSearchBox();
 	const { status } = useInstantSearch();
 	const [inputValue, setInputValue] = useState(query);
-	const inputRef = useRef(null);
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	const isSearchStalled = status === 'stalled';
 
