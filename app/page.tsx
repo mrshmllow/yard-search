@@ -5,6 +5,7 @@ import { instantMeiliSearch } from '@meilisearch/instant-meilisearch';
 import { XMarkIcon, MagnifyingGlassIcon, FunnelIcon, BarsArrowDownIcon } from '@heroicons/react/24/solid';
 import SearchBox from "./(components)/SearchBox";
 import SortBy from './(components)/SortBy';
+import { Hit, BaseHit } from "instantsearch.js";
 import { env } from "@/env";
 
 
@@ -25,10 +26,17 @@ const { searchClient } = instantMeiliSearch(
 	}
 );
 
-const Hit = ({ hit }: { hit: { chapter: string, uploaded: string, youtube_id: string, trans: string } }) => <div className="border border-black rounded flex flex-col">
+interface Chapter {
+	chapter: string;
+	uploaded: string;
+	youtube_id: string;
+	trans: string;
+}
+
+const Hit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => <div className="border border-black rounded flex flex-col">
 	<div className="rounded-lg border-gray-500 border px-2 py-2 flex flex-col">
 		<div className="flex place-items-center gap-2">
-			<span className="font-bold">Episode 136</span>
+			<span className="font-bold">Episode TODO</span>
 
 			<Highlight attribute="chapter" className="text-gray-300" hit={hit} classNames={{
 				highlighted: "bg-white text-black",
