@@ -1,4 +1,5 @@
 #!/bin/sh -x
+set -e
 
 if [ ! -d "$1" ]; then
   echo "$1 does not exist."
@@ -9,12 +10,17 @@ mkdir -p $1
 
 pushd $1
 
+info_file=$(find . -type f -name "*.info.json" | head -n 1)
+
 for filename in *.wav.vtt; do
+# for filename in "2 shannon sharpe calling kai cenat short.wav.vtt"; do
 	number=${filename%% *}
 	chapter=${filename%.*.*}
 	chapter=${chapter#* }
-	echo "$a"
-	data=$(jq -Rs "{ trans: ., id: \"$1-$number\", \"chapter\": \"$chapter\", \"episode\": 136, \"youtube_id\": \"$1\", \"uploaded\": \"2024-02-23\" }" "$filename")
+
+	offset=$(cat "$info_file" | jq ".chapters[] | select(.title==\"$chapter\").start_time | floor")
+
+	data=$(jq -Rs "{ trans: ., id: \"$1-$number\", \"chapter\": \"$chapter\", \"episode\": 136, \"offset\": $offset, \"youtube_id\": \"$1\", \"uploaded\": \"2024-02-23\" }" "$filename")
 
 	echo "$data" > data.json
 
@@ -26,3 +32,5 @@ for filename in *.wav.vtt; do
 done
 
 popd
+
+echo "Done!"

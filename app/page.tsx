@@ -7,6 +7,11 @@ import SearchBox from "./(components)/SearchBox";
 import SortBy from './(components)/SortBy';
 import { Hit, BaseHit } from "instantsearch.js";
 import { env } from "@/env";
+import Link from 'next/link';
+import {
+	EMPTY_ELLIPSIS, strip_timestamps, BROKEN_TIMESTAMP_PATTERN,
+	FULL_TIMESTAMP_PATTERN
+} from "@/app/lib";
 
 const { searchClient } = instantMeiliSearch(
 	env.NEXT_PUBLIC_MEILISEARCH_URL,
@@ -34,20 +39,7 @@ interface Chapter {
 	episode: number;
 }
 
-const FULL_TIMESTAM_PATTERN = /(?<hours>\d{2}):(?<minutes>\d{2}):(?<seconds>\d{2})\.\d{3} --&gt; \d{2}:\d{2}:\d{2}\.\d{3}/;
-const BROKEN_TIMESTAMP_PATTERN = /\d+:?\.?|--&gt;/g;
-const EMPTY_ELLIPSIS = /^ *?…$/;
-
-function strip_timestamps(string: string) {
-	// Must do this to maintain html codes
-	const decodedString = string.replace(/&#(\d+);/g, (match, decimal) => {
-		return String.fromCharCode(parseInt(decimal, 10));
-	});
-
-	return decodedString.replace(FULL_TIMESTAM_PATTERN, "").replaceAll(BROKEN_TIMESTAMP_PATTERN, "")
-}
-
-const Hit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => <div className="border border-black rounded flex flex-col">
+const Hit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => <Link className="border border-black rounded flex flex-col" href={`${hit.episode}#${hit.chapter}`}>
 	<div className="rounded-lg border-gray-500 border px-2 py-2 flex flex-col">
 		<div className="flex place-items-center gap-2">
 			<span className="font-bold">Episode {hit.episode}</span>
@@ -60,8 +52,6 @@ const Hit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => <div className="border
 		<div className="flex flex-col gap-2">
 			{hit._highlightResult.trans.value.split("\n\n").filter(line => !line.startsWith("WEBVTT")).map(string => {
 				const stripped = strip_timestamps(string);
-
-				console.log(stripped)
 
 				if (stripped.match(EMPTY_ELLIPSIS)) return <></>
 
@@ -81,12 +71,12 @@ const Hit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => <div className="border
 			})}
 		</div>
 	</div>
-</div>;
+</Link>;
 
 export default function Home() {
 	return (
 		<main className="px-4">
-			<h1 className="py-4">yard search</h1>
+			<Link href="/"><h1 className="py-4">yard search</h1></Link>
 
 			<InstantSearch searchClient={searchClient} indexName="chapters">
 				<div className="flex flex-col gap-2">

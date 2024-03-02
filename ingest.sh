@@ -22,6 +22,7 @@ yt-dlp "https://www.youtube.com/watch?v=$1" \
 	--sponsorblock-remove "all" \
 	-o "chapter:%(section_number)s %(section_title)s.%(ext)s" \
 	--audio-format wav \
+	--write-info-json \
 	--postprocessor-args "-ar 16000 -ac 1 -c:a pcm_s16le"
 
 for filename in *.wav; do
