@@ -10,10 +10,9 @@ mkdir -p $1
 
 pushd $1
 
-info_file=$(find . -type f -name "*.info.json" | head -n 1)
+info_file="source.info.json"
 
 for filename in *.wav.vtt; do
-# for filename in "2 shannon sharpe calling kai cenat short.wav.vtt"; do
 	number=${filename%% *}
 	chapter=${filename%.*.*}
 	chapter=${chapter#* }
