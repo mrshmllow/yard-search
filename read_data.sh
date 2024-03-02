@@ -19,8 +19,9 @@ for filename in *.wav.vtt; do
 	chapter=${chapter#* }
 
 	offset=$(cat "$info_file" | jq ".chapters[] | select(.title==\"$chapter\").start_time | floor")
+	uploaded=$(cat "$info_file" | jq ".upload_date | tonumber")
 
-	data=$(jq -Rs "{ trans: ., id: \"$1-$number\", \"chapter\": \"$chapter\", \"episode\": 136, \"offset\": $offset, \"youtube_id\": \"$1\", \"uploaded\": \"2024-02-23\" }" "$filename")
+	data=$(jq -Rs "{ trans: ., id: \"$1-$number\", \"chapter\": \"$chapter\", \"episode\": 137, \"offset\": $offset, \"youtube_id\": \"$1\", \"uploaded\": $uploaded }" "$filename")
 
 	echo "$data" > data.json
 
