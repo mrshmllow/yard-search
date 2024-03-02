@@ -1,5 +1,5 @@
 const SUB_TIMESTAMPS = /\d{2}:\d{2}:\d{2}\.\d{3} --> \d{2}:\d{2}:\d{2}\.\d{3}/gm;
-const CAPTURE_TIMESTAMPS = /(?<hours>\d{2}):(?<minutes>\d{2}):(?<seconds>\d{2})\.\d{3} --> \d{2}:\d{2}:\d{2}\.\d{3}(?<text>.*)/;
+const CAPTURE_TIMESTAMPS = /(?<hours>\d{2}):(?<minutes>\d{2}):(?<seconds>\d{2})\.\d{3} --> (?<end_hours>\d{2}):(?<end_minutes>\d{2}):(?<end_seconds>\d{2})\.\d{3}(?<text>.*)/;
 
 const SUB_BROKEN_TIMESTAMPS = /\d+:?\.?|--&gt;/g;
 export const EMPTY_ELLIPSIS = /^ *?…$/;
@@ -24,14 +24,17 @@ export function get_timetamp(string: string, offset: number) {
 	if (groups === undefined) {
 		return {
 			seconds: 0,
+			end_seconds: 0,
 			value
 		}
 	}
 
 	let seconds = offset + Number(groups.seconds) + (Number(groups.minutes) * 60) + (Number(groups.hours) * 60 * 60)
+	let end_seconds = offset + Number(groups.end_seconds) + (Number(groups.end_minutes) * 60) + (Number(groups.end_hours) * 60 * 60)
 
 	return {
 		seconds,
+		end_seconds,
 		value
 	}
 }

@@ -19,6 +19,7 @@
     "react-dom": "^18",
     "react-instantsearch": "^7.6.0",
     "react-youtube": "^10.1.0",
+    "usehooks-ts": "^2.15.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
