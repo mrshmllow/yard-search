@@ -6,6 +6,11 @@ if [ ! -d "$1" ]; then
   exit
 fi
 
+if [ ! "$2" ]; then
+  echo "please pass an episode number"
+  exit
+fi
+
 mkdir -p $1
 
 pushd $1
@@ -20,7 +25,7 @@ for filename in *.wav.vtt; do
 	offset=$(cat "$info_file" | jq ".chapters[] | select(.title==\"$chapter\").start_time | floor")
 	uploaded=$(cat "$info_file" | jq ".upload_date | tonumber")
 
-	data=$(jq -Rs "{ trans: ., id: \"$1-$number\", \"chapter\": \"$chapter\", \"episode\": 137, \"offset\": $offset, \"youtube_id\": \"$1\", \"uploaded\": $uploaded }" "$filename")
+	data=$(jq -Rs "{ trans: ., id: \"$1-$number\", \"chapter\": \"$chapter\", \"episode\": $2, \"offset\": $offset, \"youtube_id\": \"$1\", \"uploaded\": $uploaded }" "$filename")
 
 	echo "$data" > data.json
 
