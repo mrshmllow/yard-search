@@ -13,10 +13,10 @@ export default function SortBy() {
 	} = useSortBy({
 		items: [
 			{
-				label: "Oldest First", value: ASC
+				label: "Newest First", value: DESC
 			},
 			{
-				label: "Newest First", value: DESC
+				label: "Oldest First", value: ASC
 			},
 			{
 				label: "Relevant", value: "chapters"
