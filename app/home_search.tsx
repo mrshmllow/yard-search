@@ -12,6 +12,7 @@ import {
 	EMPTY_ELLIPSIS, strip_timestamps
 } from "@/app/lib";
 import { InstantSearchNext } from 'react-instantsearch-nextjs';
+import { useMemo } from 'react';
 
 const { searchClient } = instantMeiliSearch(
 	env.NEXT_PUBLIC_MEILISEARCH_URL,
@@ -35,28 +36,43 @@ interface Chapter {
 	youtube_id: string;
 	trans: string;
 	episode: number;
+	id: string;
 }
 
-const Hit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => <Link className="border border-black rounded flex flex-col" href={`${hit.youtube_id}#${hit.chapter}`}>
-	<div className="rounded-lg border-gray-500 border px-2 py-2 flex flex-col">
-		<div className="flex place-items-center gap-2">
-			<span className="font-bold">Episode {hit.episode}</span>
+const Hit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => {
+	const value = useMemo(() => {
+		if (hit._highlightResult === undefined) return null;
 
-			<Highlight attribute="chapter" className="text-gray-300" hit={hit} classNames={{
-				highlighted: "bg-white text-black",
-			}} />
-		</div>
+		let value = hit._highlightResult.trans
 
-		<div className="flex flex-col gap-2">
-			{hit._highlightResult.trans.value.split("\n\n").filter(line => !line.startsWith("WEBVTT")).map(string => {
-				const stripped = strip_timestamps(string);
+		// TODO: Fix this so it wont break if we are randomly given an array because we probably could be
+		if (Array.isArray(value)) return null;
 
-				if (stripped.match(EMPTY_ELLIPSIS)) return <></>
+		if ((typeof value.value) === "string") return value.value as string
 
-				return <>
-					<Highlight attribute="split" hit={{
+		return null
+	}, [hit]);
+
+	return <Link className="border border-black rounded flex flex-col" href={`${hit.youtube_id}#${hit.chapter}`} key={hit.id}>
+		<div className="rounded-lg border-gray-500 border px-2 py-2 flex flex-col">
+			<div className="flex place-items-center gap-2">
+				<span className="font-bold">Episode {hit.episode}</span>
+
+				<Highlight attribute="chapter" className="text-gray-300" hit={hit} classNames={{
+					highlighted: "bg-white text-black",
+				}} />
+			</div>
+
+			<div className="flex flex-col gap-2">
+				{value && value.split("\n\n").filter(line => !line.startsWith("WEBVTT")).map(string => {
+					const stripped = strip_timestamps(string);
+
+					if (stripped.match(EMPTY_ELLIPSIS)) return <></>
+
+					return <Highlight attribute="split" hit={{
 						"_highlightResult": {
 							"split": {
+								// @ts-ignore
 								"value": stripped
 							}
 						}
@@ -64,13 +80,14 @@ const Hit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => <Link className="borde
 						classNames={{
 							highlighted: "bg-white text-black rounded-sm",
 						}}
+						// TODO: Fix non-unique key
+						key={`${hit.youtube_id}${hit.chapter}${string}`}
 					/>
-				</>
-			})}
+				})}
+			</div>
 		</div>
-	</div>
-</Link>;
-
+	</Link>;
+}
 
 export default function HomeSearch() {
 	return <InstantSearchNext searchClient={searchClient} indexName="chapters" routing>

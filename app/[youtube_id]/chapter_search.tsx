@@ -29,6 +29,7 @@ const { searchClient } = instantMeiliSearch(
 );
 
 interface Chapter {
+	id: string;
 	chapter: string;
 	uploaded: string;
 	youtube_id: string;
@@ -45,7 +46,6 @@ const TranscriptLine = ({ string, offset }: { string: string, offset: number }) 
 
 	useEffect(() => {
 		if (current) {
-			console.log(line.value, line.seconds, line.end_seconds, "is drawing focus")
 			ref.current?.scrollIntoView({
 				behavior: "smooth",
 			})
@@ -60,6 +60,7 @@ const TranscriptLine = ({ string, offset }: { string: string, offset: number }) 
 		<Highlight attribute="split" hit={{
 			"_highlightResult": {
 				"split": {
+					// @ts-ignore
 					"value": line.value
 				}
 			}
@@ -84,7 +85,7 @@ const ChapterHit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => {
 			</div>
 
 			<div className="flex flex-col gap-2">
-				{lines.map(string => <TranscriptLine string={string} offset={hit.offset} />)}
+				{lines.map(string => <TranscriptLine key={hit.id} string={string} offset={hit.offset} />)}
 			</div>
 		</div>
 	</div>
