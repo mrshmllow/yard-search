@@ -26,7 +26,7 @@ yt-dlp "https://www.youtube.com/watch?v=$1" \
 	--write-info-json \
 	--postprocessor-args "-ar 16000 -ac 1 -c:a pcm_s16le"
 
-rm source
+rm source.wav
 
 for filename in *.wav; do
 	whisper-cpp -m "$abs_model" -f "$filename" --output-vtt
