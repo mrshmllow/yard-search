@@ -30,6 +30,8 @@ const TranscriptLine = memo(function({ string, offset }: { string: string, offse
 	}} className={`text-left rounded-sm scroll-mt-[50vh] w-fit relative`} ref={ref}>
 		{current && <motion.div className="bg-white bg-opacity-15 w-[calc(100%+1rem)] h-[calc(100%+.5rem)] absolute -top-1 -left-2 -z-10 rounded-md" layoutId="current" />}
 
+		<span className="sr-only">Jump to {line.seconds}: {'"'}</span>
+
 		<Highlight attribute="split" hit={{
 			"_highlightResult": {
 				"split": {
@@ -43,6 +45,8 @@ const TranscriptLine = memo(function({ string, offset }: { string: string, offse
 				root: "break-words"
 			}}
 		/>
+
+		<span className="sr-only">{'"'}</span>
 	</button>
 })
 
