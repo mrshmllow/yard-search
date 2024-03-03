@@ -45,6 +45,8 @@ const TranscriptLine = memo(function({ string, offset }: { string: string, offse
 	</button>
 })
 
+TranscriptLine.displayName = "TranscriptLine"
+
 const ChapterHit = memo(function({ hit }: { hit: Hit<BaseHit & Chapter> }) {
 	const lines = useMemo(() => hit.trans.split("\n\n").filter(line => !line.startsWith("WEBVTT")).map(string => <TranscriptLine key={`${hit.id}-${string}`} string={string} offset={hit.offset} />), [hit.trans, hit.id, hit.offset])
 
@@ -62,6 +64,8 @@ const ChapterHit = memo(function({ hit }: { hit: Hit<BaseHit & Chapter> }) {
 		</div>
 	</div>
 });
+
+ChapterHit.displayName = "ChapterHit"
 
 const SeekContext = createContext<{
 	seekTo: (i: number) => Promise<void>;
