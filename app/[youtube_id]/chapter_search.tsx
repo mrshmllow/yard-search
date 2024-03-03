@@ -80,7 +80,7 @@ const SeekContext = createContext({
 	duration: 0
 })
 
-export default function ChapterSearch({ youtube_id }: { youtube_id: string }) {
+export default function ChapterSearch({ youtube_id, jump_to, autoplay }: { youtube_id: string, jump_to: number, autoplay: boolean }) {
 	const [yt, setYt] = useState<YouTubePlayer>(null);
 	const [duration, setDuration] = useState(-1);
 	const [isPlaying, setPlaying] = useState<boolean>(false)
@@ -112,7 +112,16 @@ export default function ChapterSearch({ youtube_id }: { youtube_id: string }) {
 				}}
 				onPlay={() => setPlaying(true)}
 				onPause={() => setPlaying(false)}
-				className="rounded-lg sticky top-0 overflow-hidden"
+				className="rounded-lg sticky top-0 overflow-hidden aspect-video relative bg-black shadow-lg"
+				iframeClassName=""
+				opts={{
+					playerVars: {
+						start: jump_to,
+						playsinline: true,
+						autoplay
+					},
+					host: "https://www.youtube-nocookie.com"
+				}}
 			/>
 
 			<div className="flex flex-col gap-2 pt-8 pb-4">

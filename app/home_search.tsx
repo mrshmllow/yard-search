@@ -37,7 +37,7 @@ const Hit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => {
 		return null
 	}, [hit]);
 
-	return <Link className="border border-black rounded flex flex-col" href={`${hit.youtube_id}#${hit.chapter}`} key={hit.id}>
+	return <Link className="border border-black rounded flex flex-col" href={`${hit.youtube_id}?offset=${hit.offset}&autoplay=1`} key={hit.id}>
 		<div className="rounded-lg border-gray-500 border px-2 py-2 flex flex-col">
 			<div className="flex place-items-center gap-2">
 				<span className="font-bold">Episode {hit.episode}</span>
