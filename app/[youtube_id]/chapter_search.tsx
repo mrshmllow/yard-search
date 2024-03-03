@@ -52,11 +52,11 @@ const ChapterHit = memo(function({ hit }: { hit: Hit<BaseHit & Chapter> }) {
 	const lines = useMemo(() => hit.trans.split("\n\n").filter(line => !line.startsWith("WEBVTT")).map(string => <TranscriptLine key={`${hit.id}-${string}`} string={string} offset={hit.offset} />), [hit.trans, hit.id, hit.offset])
 
 	return <div className="rounded flex flex-col" id={hit.chapter} key={hit.id}>
-		<div className="rounded-lg px-2 flex flex-col">
+		<div className="rounded-lg flex flex-col">
 			<div className="flex place-items-center gap-2">
-				<Highlight attribute="chapter" className="font-bold pb-2" hit={hit} classNames={{
-					highlighted: "bg-white text-black",
-				}} />
+				<h3 className="font-bold pb-2" id={`${hit.offset}`}>
+					{hit.chapter}
+				</h3>
 			</div>
 
 			<div className="flex flex-col gap-2">
@@ -122,6 +122,9 @@ export default function ChapterSearch({ youtube_id, jump_to, autoplay }: { youtu
 				/>
 
 				<div className="flex flex-col gap-2 pt-4 lg:pt-0 pb-4">
+					<h2 className="pb-2 text-lg font-bold">
+						Episode {youtube_id}
+					</h2>
 					<InfiniteHits hitComponent={ChapterHit} classNames={{
 						root: "flex flex-col lg:w-[50vw]",
 						list: "flex gap-2 flex-col",
