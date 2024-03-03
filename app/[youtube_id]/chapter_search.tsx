@@ -26,7 +26,7 @@ const TranscriptLine = memo(function({ string, offset }: { string: string, offse
 
 	return <button onClick={async () => {
 		await seekTo(line.seconds)
-	}} className={`text-left rounded-sm scroll-mt-[50vh] ${current ? "bg-white bg-opacity-10" : ""}`} ref={ref}>
+	}} className={`text-left rounded-sm scroll-mt-[50vh] transition bg-white duration-500 ${current ? "bg-opacity-10" : "bg-opacity-0"}`} ref={ref}>
 		<Highlight attribute="split" hit={{
 			"_highlightResult": {
 				"split": {
