@@ -13,23 +13,7 @@ import {
 } from "@/app/lib";
 import { InstantSearchNext } from 'react-instantsearch-nextjs';
 import { useMemo } from 'react';
-
-const { searchClient } = instantMeiliSearch(
-	env.NEXT_PUBLIC_MEILISEARCH_URL,
-	env.NEXT_PUBLIC_MEILISEARCH_KEY,
-	{
-		meiliSearchParams: {
-			attributesToRetrieve: [
-				"id",
-				"chapter",
-				"youtube_id",
-				"episode",
-			],
-			attributesToCrop: ["trans"],
-			cropLength: 60
-		},
-	}
-);
+import { searchClient } from './search';
 
 interface Chapter {
 	chapter: string;

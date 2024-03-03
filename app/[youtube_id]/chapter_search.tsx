@@ -8,25 +8,7 @@ import Youtube from "react-youtube"
 import { YouTubePlayer } from "react-youtube";
 import { useInterval } from 'usehooks-ts';
 import { InstantSearchNext } from 'react-instantsearch-nextjs';
-
-const { searchClient } = instantMeiliSearch(
-	env.NEXT_PUBLIC_MEILISEARCH_URL,
-	env.NEXT_PUBLIC_MEILISEARCH_KEY,
-	{
-		meiliSearchParams: {
-			attributesToRetrieve: [
-				"id",
-				"chapter",
-				"youtube_id",
-				"uploaded",
-				"episode",
-				"trans",
-				"offset"
-			],
-			attributesToCrop: ["trans"],
-		},
-	}
-);
+import { searchClient } from '../search';
 
 interface Chapter {
 	id: string;
