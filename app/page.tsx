@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 export default function Home() {
 	return (
-		<main className="px-4 w-full">
+		<main className="px-4 w-full md:max-w-4xl">
 			<HomeLink />
 
 			<HomeSearch />

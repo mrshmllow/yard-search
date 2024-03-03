@@ -96,32 +96,34 @@ export default function ChapterSearch({ youtube_id, jump_to, autoplay }: { youtu
 		<InstantSearchNext searchClient={searchClient} indexName="chapters">
 			<Configure filters={`youtube_id = ${youtube_id}`} hitsPerPage={5} />
 
-			<Youtube
-				videoId={youtube_id}
-				onReady={(event) => {
-					setYt(event.target)
-				}}
-				onPlay={() => setPlaying(true)}
-				onPause={() => setPlaying(false)}
-				className="rounded-lg sticky top-0 overflow-hidden aspect-video relative bg-black shadow-lg z-10 w-full"
-				iframeClassName="w-full h-full absolute top-0 left-0"
-				opts={{
-					playerVars: {
-						start: jump_to,
-						playsinline: true,
-						autoplay
-					},
-					host: "https://www.youtube-nocookie.com"
-				}}
-			/>
+			<div className="flex flex-col lg:flex-row gap-4">
+				<Youtube
+					videoId={youtube_id}
+					onReady={(event) => {
+						setYt(event.target)
+					}}
+					onPlay={() => setPlaying(true)}
+					onPause={() => setPlaying(false)}
+					className="sticky top-0 overflow-hidden aspect-video bg-black shadow-lg z-10 w-full lg:w-[70vw] lg:aspect-auto lg:grid lg:h-screen"
+					iframeClassName="rounded-lg w-full h-full absolute top-0 left-0 lg:aspect-video lg:w-full lg:h-fit lg:place-self-center lg:relative"
+					opts={{
+						playerVars: {
+							start: jump_to,
+							playsinline: true,
+							autoplay
+						},
+						host: "https://www.youtube-nocookie.com"
+					}}
+				/>
 
-			<div className="flex flex-col gap-2 pt-8 pb-4">
-				<InfiniteHits hitComponent={ChapterHit} classNames={{
-					root: "flex flex-col",
-					list: "flex gap-2 flex-col",
-					loadMore: "bg-white bg-opacity-10 text-white rounded-lg px-4 h-10 my-4 w-full place-self-center md:w-fit",
-					disabledLoadMore: "hidden"
-				}} showPrevious={false} />
+				<div className="flex flex-col gap-2 pt-4 lg:pt-0 pb-4">
+					<InfiniteHits hitComponent={ChapterHit} classNames={{
+						root: "flex flex-col",
+						list: "flex gap-2 flex-col",
+						loadMore: "bg-white bg-opacity-10 text-white rounded-lg px-4 h-10 my-4 w-full place-self-center md:w-fit",
+						disabledLoadMore: "hidden"
+					}} showPrevious={false} />
+				</div>
 			</div>
 		</InstantSearchNext>
 	</SeekContext.Provider>
