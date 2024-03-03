@@ -1,16 +1,14 @@
 import { Highlight, InfiniteHits, Configure } from 'react-instantsearch';
-import { instantMeiliSearch } from '@meilisearch/instant-meilisearch';
-import { env } from "@/env";
 import { Hit, BaseHit } from "instantsearch.js";
 import { get_timetamp } from '../lib';
-import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, memo, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import Youtube from "react-youtube"
 import { YouTubePlayer } from "react-youtube";
 import { useInterval } from 'usehooks-ts';
 import { InstantSearchNext } from 'react-instantsearch-nextjs';
 import { Chapter, searchClient } from '../search';
 
-const TranscriptLine = ({ string, offset }: { string: string, offset: number }) => {
+const TranscriptLine = memo(function({ string, offset }: { string: string, offset: number }) {
 	const line = useMemo(() => get_timetamp(string, offset), [string, offset])
 	const { seekTo, duration } = useContext(SeekContext);
 	const ref = useRef<HTMLButtonElement>(null)
@@ -42,13 +40,12 @@ const TranscriptLine = ({ string, offset }: { string: string, offset: number }) 
 			}}
 		/>
 	</button>
-};
+})
 
+const ChapterHit = memo(function({ hit }: { hit: Hit<BaseHit & Chapter> }) {
+	const lines = useMemo(() => hit.trans.split("\n\n").filter(line => !line.startsWith("WEBVTT")).map(string => <TranscriptLine key={`${hit.id}-${string}`} string={string} offset={hit.offset} />), [hit.trans])
 
-const ChapterHit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => {
-	const lines = useMemo(() => hit.trans.split("\n\n").filter(line => !line.startsWith("WEBVTT")), [hit])
-
-	return <div className="border border-black rounded flex flex-col" id={hit.chapter}>
+	return <div className="border border-black rounded flex flex-col" id={hit.chapter} key={hit.id}>
 		<div className="rounded-lg px-2 flex flex-col">
 			<div className="flex place-items-center gap-2">
 				<Highlight attribute="chapter" className="font-bold" hit={hit} classNames={{
@@ -57,11 +54,11 @@ const ChapterHit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => {
 			</div>
 
 			<div className="flex flex-col gap-2">
-				{lines.map(string => <TranscriptLine key={hit.id} string={string} offset={hit.offset} />)}
+				{lines}
 			</div>
 		</div>
 	</div>
-};
+});
 
 const SeekContext = createContext({
 	seekTo: async (i: number) => {
@@ -82,7 +79,7 @@ export default function ChapterSearch({ youtube_id, jump_to, autoplay }: { youtu
 
 			setDuration(yt.getCurrentTime())
 		},
-		isPlaying ? 100 : null,
+		isPlaying ? 1000 : null,
 	)
 
 	return <SeekContext.Provider value={{
