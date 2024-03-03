@@ -11,6 +11,12 @@ if [ ! "$2" ]; then
   exit
 fi
 
+if [ ! "$3" ]; then
+  echo "please pass a private key"
+  exit
+fi
+
+
 mkdir -p $1
 
 pushd $1
@@ -30,9 +36,9 @@ for filename in *.wav.vtt; do
 	echo "$data" > data.json
 
 	curl \
-          -X POST 'http://localhost:7700/indexes/chapters/documents?primaryKey=id' \
+          -X POST "$NEXT_PUBLIC_MEILISEARCH_URL/indexes/chapters/documents?primaryKey=id" \
           -H 'Content-Type: application/json' \
-          -H 'Authorization: Bearer HWoz-31otPLUyXZmEfFDWpC3osm3XTW0Ebv3GTj5yrg' \
+          -H "Authorization: Bearer $3" \
           --data-binary @data.json
 done
 
