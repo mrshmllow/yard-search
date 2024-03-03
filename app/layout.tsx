@@ -37,7 +37,7 @@ export default function RootLayout({
 
 					<a className="underline hover:text-white decoration-dotted decoration-from-font" href="https://github.com/mrshmllow/yard-search">View Source</a>
 
-					<a href="https://github.com/sponsors/mrshmllow" className="hover:text-white"><HeartIcon className="w-8 h-8" aria-label="Sponsor me" /></a>
+					<a aria-label="Sponsor me" href="https://github.com/sponsors/mrshmllow" className="hover:text-white"><HeartIcon className="w-8 h-8" /></a>
 				</footer>
 			</body>
 		</html>
