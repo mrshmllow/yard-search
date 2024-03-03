@@ -40,6 +40,7 @@ const TranscriptLine = memo(function({ string, offset }: { string: string, offse
 		}}
 			classNames={{
 				highlighted: "bg-white text-black rounded-sm",
+				root: "break-words"
 			}}
 		/>
 	</button>
@@ -108,7 +109,7 @@ export default function ChapterSearch({ youtube_id, jump_to, autoplay }: { youtu
 					}}
 					onPlay={() => setPlaying(true)}
 					onPause={() => setPlaying(false)}
-					className="sticky top-0 overflow-hidden aspect-video bg-black shadow-lg z-10 w-full lg:w-[70vw] lg:aspect-auto lg:grid lg:h-screen"
+					className="sticky top-0 overflow-hidden aspect-video bg-black shadow-lg z-10 w-full lg:aspect-auto lg:grid lg:h-screen lg:w-[50vw]"
 					iframeClassName="rounded-lg w-full h-full absolute top-0 left-0 lg:aspect-video lg:w-full lg:h-fit lg:place-self-center lg:relative"
 					opts={{
 						playerVars: {
@@ -122,7 +123,7 @@ export default function ChapterSearch({ youtube_id, jump_to, autoplay }: { youtu
 
 				<div className="flex flex-col gap-2 pt-4 lg:pt-0 pb-4">
 					<InfiniteHits hitComponent={ChapterHit} classNames={{
-						root: "flex flex-col",
+						root: "flex flex-col lg:w-[50vw]",
 						list: "flex gap-2 flex-col",
 						loadMore: "bg-white bg-opacity-10 text-white rounded-lg px-4 h-10 my-4 w-full place-self-center md:w-fit",
 						disabledLoadMore: "hidden"
