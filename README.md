@@ -6,7 +6,7 @@ You must have the nix package manager installed, with flakes enabled.
 
 ```bash
 git clone https://github.com/mrshmllow/yard-search && cd yard-search
-nix develop
+nix develop --impure
 ```
 
 You may now spin up services locally...
