@@ -7,6 +7,7 @@ import { YouTubePlayer } from "react-youtube";
 import { useInterval } from 'usehooks-ts';
 import { InstantSearchNext } from 'react-instantsearch-nextjs';
 import { Chapter, searchClient } from '../search';
+import { motion } from "framer-motion"
 
 const TranscriptLine = memo(function({ string, offset }: { string: string, offset: number }) {
 	const line = useMemo(() => get_timetamp(string, offset), [string, offset])
@@ -26,7 +27,9 @@ const TranscriptLine = memo(function({ string, offset }: { string: string, offse
 
 	return <button onClick={async () => {
 		await seekTo(line.seconds)
-	}} className={`text-left rounded-sm scroll-mt-[50vh] transition bg-white duration-500 ${current ? "bg-opacity-10" : "bg-opacity-0"}`} ref={ref}>
+	}} className={`text-left rounded-sm scroll-mt-[50vh] w-fit relative`} ref={ref}>
+		{current && <motion.div className="bg-white bg-opacity-15 w-[calc(100%+1rem)] h-[calc(100%+.5rem)] absolute -top-1 -left-2 -z-10 rounded-md" layoutId="current" />}
+
 		<Highlight attribute="split" hit={{
 			"_highlightResult": {
 				"split": {
@@ -45,10 +48,10 @@ const TranscriptLine = memo(function({ string, offset }: { string: string, offse
 const ChapterHit = memo(function({ hit }: { hit: Hit<BaseHit & Chapter> }) {
 	const lines = useMemo(() => hit.trans.split("\n\n").filter(line => !line.startsWith("WEBVTT")).map(string => <TranscriptLine key={`${hit.id}-${string}`} string={string} offset={hit.offset} />), [hit.trans])
 
-	return <div className="border border-black rounded flex flex-col" id={hit.chapter} key={hit.id}>
+	return <div className="rounded flex flex-col" id={hit.chapter} key={hit.id}>
 		<div className="rounded-lg px-2 flex flex-col">
 			<div className="flex place-items-center gap-2">
-				<Highlight attribute="chapter" className="font-bold" hit={hit} classNames={{
+				<Highlight attribute="chapter" className="font-bold pb-2" hit={hit} classNames={{
 					highlighted: "bg-white text-black",
 				}} />
 			</div>
@@ -100,8 +103,8 @@ export default function ChapterSearch({ youtube_id, jump_to, autoplay }: { youtu
 				}}
 				onPlay={() => setPlaying(true)}
 				onPause={() => setPlaying(false)}
-				className="rounded-lg sticky top-0 overflow-hidden aspect-video relative bg-black shadow-lg"
-				iframeClassName=""
+				className="rounded-lg sticky top-0 overflow-hidden aspect-video relative bg-black shadow-lg z-10 w-full"
+				iframeClassName="w-full h-full absolute top-0 left-0"
 				opts={{
 					playerVars: {
 						start: jump_to,
