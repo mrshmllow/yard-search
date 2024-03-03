@@ -21,3 +21,12 @@ export const { searchClient } = instantMeiliSearch(
 	}
 );
 
+export interface Chapter {
+	chapter: string;
+	youtube_id: string;
+	trans: string;
+	episode: number;
+	id: string;
+	offset: number
+}
+

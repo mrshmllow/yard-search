@@ -8,17 +8,7 @@ import Youtube from "react-youtube"
 import { YouTubePlayer } from "react-youtube";
 import { useInterval } from 'usehooks-ts';
 import { InstantSearchNext } from 'react-instantsearch-nextjs';
-import { searchClient } from '../search';
-
-interface Chapter {
-	id: string;
-	chapter: string;
-	uploaded: string;
-	youtube_id: string;
-	trans: string;
-	episode: number;
-	offset: number
-}
+import { Chapter, searchClient } from '../search';
 
 const TranscriptLine = ({ string, offset }: { string: string, offset: number }) => {
 	const line = useMemo(() => get_timetamp(string, offset), [string, offset])
@@ -102,7 +92,7 @@ export default function ChapterSearch({ youtube_id, jump_to, autoplay }: { youtu
 		},
 		duration
 	}}>
-		<InstantSearchNext searchClient={searchClient} indexName="chapters" routing>
+		<InstantSearchNext searchClient={searchClient} indexName="chapters">
 			<Configure filters={`youtube_id = ${youtube_id}`} hitsPerPage={5} />
 
 			<Youtube

@@ -13,15 +13,7 @@ import {
 } from "@/app/lib";
 import { InstantSearchNext } from 'react-instantsearch-nextjs';
 import { useMemo } from 'react';
-import { searchClient } from './search';
-
-interface Chapter {
-	chapter: string;
-	youtube_id: string;
-	trans: string;
-	episode: number;
-	id: string;
-}
+import { Chapter, searchClient } from './search';
 
 const Hit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => {
 	const value = useMemo(() => {
