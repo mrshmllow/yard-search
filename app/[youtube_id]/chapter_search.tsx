@@ -60,10 +60,11 @@ const ChapterHit = memo(function({ hit }: { hit: Hit<BaseHit & Chapter> }) {
 	</div>
 });
 
-const SeekContext = createContext({
-	seekTo: async (i: number) => {
-		console.log("called, here");
-	},
+const SeekContext = createContext<{
+	seekTo: (i: number) => Promise<void>;
+	duration: number
+}>({
+	seekTo: async () => { },
 	duration: 0
 })
 
