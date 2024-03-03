@@ -1,6 +1,7 @@
 import { useInstantSearch, useSearchBox } from 'react-instantsearch';
 import { XMarkIcon, MagnifyingGlassIcon, FunnelIcon, BarsArrowDownIcon } from '@heroicons/react/24/solid';
 import { useState, useRef } from 'react';
+import { motion } from "framer-motion"
 
 export default function SearchBox() {
 	const { query, refine } = useSearchBox();
@@ -77,11 +78,12 @@ export default function SearchBox() {
 			autoFocus
 		/>
 
-		<button type="submit" className="bg-white rounded-lg w-10 grid place-items-center"
+		<motion.button type="submit" className="bg-white rounded-lg w-10 grid place-items-center"
 			aria-label="Serach"
+			whileTap={{ scale: 0.9 }}
 		>
 			<MagnifyingGlassIcon className="w-4 h-4 text-black" />
-		</button>
+		</motion.button>
 
 		<button
 			className="w-10 grid place-items-center"
