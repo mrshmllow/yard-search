@@ -14,6 +14,8 @@ import {
 import { InstantSearchNext } from 'react-instantsearch-nextjs';
 import { useMemo } from 'react';
 import { Chapter, searchClient } from './search';
+import NoResultsBoundary from './(components)/NoResultsBoundary';
+import NoResults from './(components)/NoResults';
 
 const Hit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => {
 	const value = useMemo(() => {
@@ -81,12 +83,14 @@ export default function HomeSearch() {
 				</div>
 			</div>
 
-			<InfiniteHits hitComponent={Hit} classNames={{
-				root: "flex flex-col",
-				list: "flex gap-2 flex-col",
-				loadMore: "bg-white bg-opacity-10 text-white rounded-lg px-4 h-10 my-4 w-full place-self-center md:w-fit",
-				disabledLoadMore: "hidden"
-			}} showPrevious={false} />
+			<NoResultsBoundary fallback={<NoResults />}>
+				<InfiniteHits hitComponent={Hit} classNames={{
+					root: "flex flex-col",
+					list: "flex gap-2 flex-col",
+					loadMore: "bg-white bg-opacity-10 text-white rounded-lg px-4 h-10 my-4 w-full place-self-center md:w-fit",
+					disabledLoadMore: "hidden"
+				}} showPrevious={false} />
+			</NoResultsBoundary>
 		</div>
 	</InstantSearchNext>
 }
