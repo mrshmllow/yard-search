@@ -46,7 +46,7 @@ const TranscriptLine = memo(function({ string, offset }: { string: string, offse
 })
 
 const ChapterHit = memo(function({ hit }: { hit: Hit<BaseHit & Chapter> }) {
-	const lines = useMemo(() => hit.trans.split("\n\n").filter(line => !line.startsWith("WEBVTT")).map(string => <TranscriptLine key={`${hit.id}-${string}`} string={string} offset={hit.offset} />), [hit.trans])
+	const lines = useMemo(() => hit.trans.split("\n\n").filter(line => !line.startsWith("WEBVTT")).map(string => <TranscriptLine key={`${hit.id}-${string}`} string={string} offset={hit.offset} />), [hit.trans, hit.id, hit.offset])
 
 	return <div className="rounded flex flex-col" id={hit.chapter} key={hit.id}>
 		<div className="rounded-lg px-2 flex flex-col">
