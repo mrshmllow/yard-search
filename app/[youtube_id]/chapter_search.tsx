@@ -1,4 +1,4 @@
-import { Highlight, InfiniteHits, Configure } from 'react-instantsearch';
+import { Highlight, InfiniteHits, useSortBy, Configure } from 'react-instantsearch';
 import { Hit, BaseHit } from "instantsearch.js";
 import { get_timetamp } from '../lib';
 import { createContext, memo, useContext, useEffect, useMemo, useRef, useState } from 'react';
@@ -80,6 +80,21 @@ const SeekContext = createContext<{
 	duration: 0
 })
 
+const InternalSortBy = memo(function () {
+	const {refine} = useSortBy({
+	  items: [
+	    { label: 'internal', value: 'chapters:offset:asc' },
+	  ],
+	});
+
+	console.log("rerender")
+	refine("chapters:offset:asc")
+
+	return <></>
+})
+
+InternalSortBy.displayName = "InternalSortBy"
+
 export default function ChapterSearch({ youtube_id, jump_to, autoplay }: { youtube_id: string, jump_to: number, autoplay: boolean }) {
 	const [yt, setYt] = useState<YouTubePlayer>(null);
 	const [duration, setDuration] = useState(-1);
@@ -104,6 +119,7 @@ export default function ChapterSearch({ youtube_id, jump_to, autoplay }: { youtu
 	}}>
 		<InstantSearchNext searchClient={searchClient} indexName="chapters">
 			<Configure filters={`youtube_id = ${youtube_id}`} hitsPerPage={5} />
+			<InternalSortBy />
 
 			<div className="flex flex-col lg:flex-row gap-4">
 				<Youtube
