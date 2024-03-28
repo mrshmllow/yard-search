@@ -25,7 +25,7 @@ export default function SortBy() {
 	});
 	const [step, setStep] = useState(0);
 
-	return <motion.button className="bg-white rounded-lg flex justify-center h-full place-items-center gap-2 px-4 text-black" onClick={() => {
+	return <motion.button className="bg-white rounded-lg flex justify-center h-full place-items-center gap-2 px-4 text-black ml-auto" onClick={() => {
 		setStep(step => (step + 1) % options.length);
 		refine(options[step].value)
 	}}
