@@ -39,17 +39,18 @@
           };
 
           packages = with pkgs; [
-	    openai-whisper
-	    openai-whisper-cpp
-	    yt-dlp
-	    ffmpeg
+            openai-whisper
+            openai-whisper-cpp
+            yt-dlp
+            ffmpeg
 
-	    jq
+            nodePackages.typescript-language-server
+            jq
           ];
 
           services.meilisearch = {
             enable = true;
-	    environment = "development";
+            environment = "development";
           };
         };
       };
