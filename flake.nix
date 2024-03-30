@@ -38,15 +38,21 @@
             NEXT_PUBLIC_MEILISEARCH_KEY = "HWoz-31otPLUyXZmEfFDWpC3osm3XTW0Ebv3GTj5yrg";
           };
 
-          packages = with pkgs; [
-            openai-whisper
-            openai-whisper-cpp
-            yt-dlp
-            ffmpeg
+          packages = let
+            ingest = pkgs.writeShellScriptBin "ingest" ./scripts/ingest.sh;
+            read_data = pkgs.writeShellScriptBin "read_data" ./scripts/read_data.sh;
+          in
+            with pkgs; [
+              openai-whisper
+              openai-whisper-cpp
+              yt-dlp
+              ffmpeg
 
-            nodePackages.typescript-language-server
-            jq
-          ];
+              nodePackages.typescript-language-server
+              jq
+              ingest
+              read_data
+            ];
 
           services.meilisearch = {
             enable = true;
