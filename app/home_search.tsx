@@ -83,7 +83,7 @@ const Hit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => {
 										})
 									}}
 								>
-									Share Chapter ({hit.episode} "{hit.chapter}")
+									Share Chapter ({hit.episode} {'"'}{hit.chapter}{'"'})
 								</button>
 							)}
 						</Menu.Item>
