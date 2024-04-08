@@ -127,24 +127,34 @@ const demoVariants = {
 };
 
 const Hits = () => {
-	const { hits } = useInfiniteHits<BaseHit & Chapter>();
+	const { hits, isLastPage, showMore } = useInfiniteHits<BaseHit & Chapter>();
 	const { status } = useInstantSearch()
 
-	return <motion.ol className="flex gap-2 flex-col" variants={demoVariants} animate="animate">
-		{(status === 'loading' || status === 'stalled') ? <>
-			{[...Array(10)].map((n, index) => (
-				<motion.div key={index} initial={{ opacity: 0 }} variants={demoVariants} className="bg-white bg-opacity-20 rounded-lg animate-pulse w-full h-40" >
-				</motion.div>
-			))}
-		</> : <>
-			{hits.map((hit, index) => (
-				<li key={hit.objectID}>
-					<Hit hit={hit} />
-				</li>
-			))}
-		</>}
+	return <>
+		<motion.ol className="flex gap-2 flex-col" variants={demoVariants} animate="animate">
+			{(status === 'loading' || status === 'stalled') ? <>
+				{[...Array(10)].map((n, index) => (
+					<motion.div key={index} initial={{ opacity: 0 }} variants={demoVariants} className="bg-white bg-opacity-20 rounded-lg animate-pulse w-full h-40" >
+					</motion.div>
+				))}
+			</> : <>
+				{hits.map((hit, index) => (
+					<li key={hit.objectID}>
+						<Hit hit={hit} />
+					</li>
+				))}
+			</>}
+		</motion.ol>
 
-	</motion.ol>
+		{!isLastPage && <motion.button onClick={() => {
+			showMore()
+		}}
+			className="rounded-lg gap-2 px-4 bg-white bg-opacity-10 text-white h-10"
+			whileTap={{ scale: 0.9 }}
+		>
+			Load more
+		</motion.button>}
+	</>
 }
 
 const pluralize = (count: number, noun: string, suffix = 's') =>
