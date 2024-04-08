@@ -1,6 +1,6 @@
 "use client";
 
-import { Configure, Highlight, InfiniteHits, } from 'react-instantsearch';
+import { Configure, Highlight, InfiniteHits, useInfiniteHits, useInstantSearch } from 'react-instantsearch';
 import { EllipsisHorizontalIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import SearchBox from "./(components)/SearchBox";
 import SortBy from './(components)/SortBy';
@@ -15,6 +15,7 @@ import { Chapter, searchClient } from './search';
 import NoResultsBoundary from './(components)/NoResultsBoundary';
 import NoResults from './(components)/NoResults';
 import { Menu } from '@headlessui/react';
+import { motion } from 'framer-motion';
 
 const EpisodeFilteringContext = createContext<{
 	filterEpisode: (id: string) => void;
@@ -38,7 +39,8 @@ const Hit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => {
 		return null
 	}, [hit]);
 
-	return <Link className="border border-black rounded flex flex-col" href={`${hit.youtube_id}?offset=${hit.offset}&autoplay=1`} key={hit.id}>
+	return <Link
+		className="border border-black rounded flex flex-col" href={`${hit.youtube_id}?offset=${hit.offset}&autoplay=1`} key={hit.id}>
 		<div className="rounded-lg border-gray-500 border px-2 py-2 flex flex-col relative group">
 			<div className="flex place-items-center gap-2">
 				<span className="font-bold">Episode {hit.episode}</span>
@@ -50,7 +52,7 @@ const Hit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => {
 
 			<div className="absolute top-2 right-2">
 				<Menu as="div" className="relative inline-block text-right">
-					<Menu.Button className="bg-white text-black rounded-md p-1 hidden group-hover:inline-block">
+					<Menu.Button className="bg-white bg-opacity-10 text-white rounded-md p-1">
 						<EllipsisHorizontalIcon className="w-6 h-6" />
 					</Menu.Button>
 
@@ -65,7 +67,23 @@ const Hit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => {
 										filterEpisode(hit.youtube_id)
 									}}
 								>
-									Ignore Episode
+									Ignore Episode {hit.episode}
+								</button>
+							)}
+						</Menu.Item>
+						<Menu.Item>
+							{({ active }) => (
+								<button
+									className={`${active ? 'bg-white text-black' : 'text-white'
+										} group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+									onClick={(e) => {
+										e.preventDefault()
+										navigator.share({
+											url: `https://youtu.be/${hit.youtube_id}?t=${hit.offset}`,
+										})
+									}}
+								>
+									Share Chapter ({hit.episode} "{hit.chapter}")
 								</button>
 							)}
 						</Menu.Item>
@@ -99,6 +117,36 @@ const Hit = ({ hit }: { hit: Hit<BaseHit & Chapter> }) => {
 	</Link>;
 }
 
+const demoVariants = {
+	animate: {
+		opacity: 1,
+		transition: {
+			staggerChildren: 0.2,
+		},
+	},
+};
+
+const Hits = () => {
+	const { hits } = useInfiniteHits<BaseHit & Chapter>();
+	const { status } = useInstantSearch()
+
+	return <motion.ol className="flex gap-2 flex-col" variants={demoVariants} animate="animate">
+		{(status === 'loading' || status === 'stalled') ? <>
+			{[...Array(10)].map((n, index) => (
+				<motion.div key={index} initial={{ opacity: 0 }} variants={demoVariants} className="bg-white bg-opacity-20 rounded-lg animate-pulse w-full h-40" >
+				</motion.div>
+			))}
+		</> : <>
+			{hits.map((hit, index) => (
+				<li key={hit.objectID}>
+					<Hit hit={hit} />
+				</li>
+			))}
+		</>}
+
+	</motion.ol>
+}
+
 const pluralize = (count: number, noun: string, suffix = 's') =>
 	`${count} ${noun}${count !== 1 ? suffix : ''}`;
 
@@ -129,14 +177,7 @@ export default function HomeSearch() {
 					</div>
 				</div>
 
-				<NoResultsBoundary fallback={<NoResults />}>
-					<InfiniteHits hitComponent={Hit} classNames={{
-						root: "flex flex-col",
-						list: "flex gap-2 flex-col",
-						loadMore: "bg-white bg-opacity-10 text-white rounded-lg px-4 h-10 my-4 w-full place-self-center md:w-fit",
-						disabledLoadMore: "hidden"
-					}} showPrevious={false} />
-				</NoResultsBoundary>
+				<Hits />
 			</div>
 		</InstantSearchNext>
 	</EpisodeFilteringContext.Provider>
