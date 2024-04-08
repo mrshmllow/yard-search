@@ -2,9 +2,22 @@ import { ArrowsUpDownIcon, Bars3Icon, BarsArrowDownIcon, BarsArrowUpIcon, StarIc
 import { useState } from "react";
 import { useSortBy } from "react-instantsearch";
 import { motion } from "framer-motion"
+import { cva } from "class-variance-authority";
 
 const DESC = "chapters:uploaded:desc";
 const ASC = "chapters:uploaded:asc";
+
+const sortByButton = cva("rounded-lg flex justify-center h-full place-items-center gap-2 px-4 ml-auto", {
+	variants: {
+		sort: {
+			default: "bg-white bg-opacity-10 text-white",
+			other: "bg-white text-black"
+		}
+	},
+	defaultVariants: {
+		sort: "default"
+	}
+})
 
 export default function SortBy() {
 	const {
@@ -25,7 +38,7 @@ export default function SortBy() {
 	});
 	const [step, setStep] = useState(0);
 
-	return <motion.button className="bg-white rounded-lg flex justify-center h-full place-items-center gap-2 px-4 text-black ml-auto" onClick={() => {
+	return <motion.button className={sortByButton({ sort: currentRefinement === "chapters" ? "default" : "other" })} onClick={() => {
 		setStep(step => (step + 1) % options.length);
 		refine(options[step].value)
 	}}
