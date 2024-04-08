@@ -42,7 +42,7 @@ const TranscriptLine = memo(function({ string, offset }: { string: string, offse
 		}}
 			classNames={{
 				highlighted: "bg-white text-black rounded-sm",
-				root: "break-words"
+				root: "break-all"
 			}}
 		/>
 
@@ -80,11 +80,11 @@ const SeekContext = createContext<{
 	duration: 0
 })
 
-const InternalSortBy = memo(function () {
-	const {refine} = useSortBy({
-	  items: [
-	    { label: 'internal', value: 'chapters:offset:asc' },
-	  ],
+const InternalSortBy = memo(function() {
+	const { refine } = useSortBy({
+		items: [
+			{ label: 'internal', value: 'chapters:offset:asc' },
+		],
 	});
 
 	console.log("rerender")
@@ -129,7 +129,7 @@ export default function ChapterSearch({ youtube_id, jump_to, autoplay }: { youtu
 					}}
 					onPlay={() => setPlaying(true)}
 					onPause={() => setPlaying(false)}
-					className="sticky top-0 overflow-hidden aspect-video bg-black shadow-lg z-10 w-full lg:aspect-auto lg:grid lg:h-screen lg:w-[50vw]"
+					className="sticky top-0 overflow-hidden aspect-video bg-black shadow-lg z-10 w-full lg:aspect-auto lg:grid lg:h-screen"
 					iframeClassName="rounded-lg w-full h-full absolute top-0 left-0 lg:aspect-video lg:w-full lg:h-fit lg:place-self-center lg:relative"
 					opts={{
 						playerVars: {
@@ -146,7 +146,7 @@ export default function ChapterSearch({ youtube_id, jump_to, autoplay }: { youtu
 						Episode {youtube_id}
 					</h2>
 					<InfiniteHits hitComponent={ChapterHit} classNames={{
-						root: "flex flex-col lg:w-[50vw]",
+						root: "flex flex-col lg:w-[40vw]",
 						list: "flex gap-2 flex-col",
 						loadMore: "bg-white bg-opacity-10 text-white rounded-lg px-4 h-10 my-4 w-full place-self-center md:w-fit",
 						disabledLoadMore: "hidden"
