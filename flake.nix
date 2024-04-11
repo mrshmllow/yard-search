@@ -32,7 +32,7 @@
         lib,
         ...
       }: {
-        packages.default = pkgs.buildNpmPackage rec {
+        packages.yard-search = pkgs.buildNpmPackage rec {
           pname = "yard-search";
           version = "1.0.0";
           src = ./.;
@@ -49,20 +49,25 @@
           NEXT_PUBLIC_MEILISEARCH_URL = "";
           NEXT_PUBLIC_MEILISEARCH_KEY = "";
 
+          # cp -r $PWD/public/ $out/out/
           installPhase = ''
             mkdir -p $out/bin
-            mv $PWD/ $out/out/
-            makeWrapper ${pkgs.nodejs}/bin/npm $out/bin/yard-search --chdir "$out/out/" --append-flags "run start"
-            chmod +x $out/bin/${pname}
+
+            cp -r $PWD/.next/standalone/ $out/out/
+            cp -r $PWD/.next/static/ $out/out/.next/
+
+            makeWrapper ${lib.getExe pkgs.nodejs} $out/bin/${pname} --chdir "$out/out/" --append-flags "server.js"
           '';
 
           meta = with lib; {
+            mainProgram = pname;
             description = "search transcripts of the yard";
             homepage = "https://github.com/mrshmllow/yard-search";
             license = licenses.mit;
             maintainers = with maintainers; [marshmallow];
           };
         };
+        packages.default = config.packages.yard-search;
 
         devenv.shells.default = {
           name = "yard-search";
