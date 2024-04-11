@@ -14,6 +14,8 @@
     extra-substituters = "https://devenv.cachix.org";
   };
 
+  nixConfig.sandbox = "relaxed";
+
   outputs = inputs @ {flake-parts, ...}:
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
@@ -27,8 +29,41 @@
         inputs',
         pkgs,
         system,
+        lib,
         ...
       }: {
+        packages.default = pkgs.buildNpmPackage rec {
+          pname = "yard-search";
+          version = "1.0.0";
+          src = ./.;
+          npmDepsHash = "sha256-vGsdSN7paacIXTslk9wVodwWrvRgWDqENEalPu+folM=";
+
+          nodejs = pkgs.nodejs_21;
+
+          npmBuildFlags = ["--turbo"];
+
+          __noChroot = true;
+
+          NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+          NEXT_PUBLIC_MEILISEARCH_URL = "";
+          NEXT_PUBLIC_MEILISEARCH_KEY = "";
+
+          installPhase = ''
+            mkdir -p $out/bin
+            mv $PWD/ $out/out/
+            makeWrapper ${pkgs.nodejs}/bin/npm $out/bin/yard-search --chdir "$out/out/" --append-flags "run start"
+            chmod +x $out/bin/${pname}
+          '';
+
+          meta = with lib; {
+            description = "search transcripts of the yard";
+            homepage = "https://github.com/mrshmllow/yard-search";
+            license = licenses.mit;
+            maintainers = with maintainers; [marshmallow];
+          };
+        };
+
         devenv.shells.default = {
           name = "yard-search";
 
