@@ -20,6 +20,7 @@
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
         inputs.devenv.flakeModule
+        ./deploy
       ];
       systems = ["x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
 
