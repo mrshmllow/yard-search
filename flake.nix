@@ -10,8 +10,8 @@
   };
 
   nixConfig = {
-    extra-trusted-public-keys = "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=";
-    extra-substituters = "https://devenv.cachix.org";
+    extra-trusted-public-keys = ["devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=" "search-jerma-fans.cachix.org-1:v2O0Nzk2V1pkPb45g4HH8HhlswNHYrptl6XfGd9nMwI="];
+    extra-substituters = ["https://devenv.cachix.org" "https://search-jerma-fans.cachix.org"];
   };
 
   nixConfig.sandbox = "relaxed";
