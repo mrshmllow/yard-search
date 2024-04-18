@@ -1,52 +1,56 @@
 {
-  withSystem,
+  moduleWithSystem,
   inputs,
   lib,
   ...
 }: {
-  flake.nixosConfigurations.search-jerma-fans = withSystem "aarch64-linux" (ctx @ {
-    config,
-    inputs',
-    ...
-  }:
-    inputs.nixpkgs.lib.nixosSystem {
-      # Expose `packages`, `inputs` and `inputs'` as module arguments.
-      # Use specialArgs permits use in `imports`.
-      # Note: if you publish modules for reuse, do not rely on specialArgs, but
-      # on the flake scope instead. See also https://flake.parts/define-module-in-separate-file.html
-      specialArgs = {
-        packages = config.packages;
-        inherit inputs inputs';
+  flake.nixosModules.default = moduleWithSystem (
+    perSystem @ {config}: nixos @ {...}: let
+      cfg = config.services.yard-search;
+    in {
+      options = {
+        services.yard-search = {
+          enable = lib.mkEnableOption (lib.mdDoc "yard-search - search transcripts of the yard");
+
+          package = lib.mkOption {
+            defaultText = lib.literalMD "`packages.default` from the yard-search flake";
+          };
+
+          hostname = lib.mkOption {
+            defaultText = lib.literalMD "yard-search hostname";
+          };
+
+          meilisearchHostname = lib.mkOption {
+            defaultText = lib.literalMD "meilisearch hostname";
+          };
+
+          masterKeyEnvironmentFile = lib.mkOption {
+            defaultText = lib.literalMD "path of file containing MEILI_MASTER_KEY=...";
+          };
+        };
       };
-      modules = [
-        ({
-          config,
-          lib,
-          packages,
-          pkgs,
-          ...
-        }: {
-          imports = [./hetzner.nix ./yard-search-module.nix];
 
-          services.yard-search = {
-            enable = true;
-            package = packages.yard-search;
-            hostname = "search.jerma.fans";
-            meilisearchHostname = "meilisearch.jerma.fans";
-          };
+      config = lib.mkIf cfg.enable {
+        services.meilisearch.enable = true;
+        services.meilisearch.environment = "production";
+        services.meilisearch.masterKeyEnvironmentFile = cfg.masterKeyEnvironmentFile;
 
-          nix.settings = {
-            experimental-features = ["nix-command" "flakes"];
-            auto-optimise-store = true;
-            sandbox = "relaxed";
+        systemd.services.yard-search = {
+          wantedBy = ["multi-user.target"];
+          after = ["network.target"];
+          description = "yard-search web server";
+          environment = {
+            NEXT_PUBLIC_MEILISEARCH_URL = "http://${cfg.meilisearchHostname}";
+            NEXT_PUBLIC_MEILISEARCH_KEY = "hellothisisakey";
           };
-
-          nix.gc = {
-            automatic = true;
-            dates = "weekly";
-            options = "--delete-older-than 30d";
+          serviceConfig = {
+            Type = "simple";
+            DynamicUser = true;
+            ExecStart = lib.getExe cfg.package;
+            SyslogLevel = "debug";
           };
-        })
-      ];
-    });
+        };
+      };
+    }
+  );
 }
