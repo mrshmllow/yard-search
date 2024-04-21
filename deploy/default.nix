@@ -30,26 +30,26 @@
         };
       };
 
-      config = lib.mkIf cfg.enable {
-        services.meilisearch.enable = true;
-        services.meilisearch.environment = "production";
-        services.meilisearch.masterKeyEnvironmentFile = cfg.masterKeyEnvironmentFile;
-
-        systemd.services.yard-search = {
-          wantedBy = ["multi-user.target"];
-          after = ["network.target"];
-          description = "yard-search web server";
-          environment = {
-            NEXT_PUBLIC_MEILISEARCH_URL = "http://${cfg.meilisearchHostname}";
-            NEXT_PUBLIC_MEILISEARCH_KEY = "hellothisisakey";
-          };
-          serviceConfig = {
-            Type = "simple";
-            DynamicUser = true;
-            ExecStart = lib.getExe cfg.package;
-            SyslogLevel = "debug";
-          };
+      config.systemd.services.yard-search = lib.mkIf cfg.enable {
+        wantedBy = ["multi-user.target"];
+        after = ["network.target"];
+        description = "yard-search web server";
+        environment = {
+          NEXT_PUBLIC_MEILISEARCH_URL = "http://${cfg.meilisearchHostname}";
+          NEXT_PUBLIC_MEILISEARCH_KEY = "hellothisisakey";
         };
+        serviceConfig = {
+          Type = "simple";
+          DynamicUser = true;
+          ExecStart = lib.getExe cfg.package;
+          SyslogLevel = "debug";
+        };
+      };
+
+      config.services.meilisearch = lib.mkIf cfg.enable {
+        enable = true;
+        environment = "production";
+        masterKeyEnvironmentFile = cfg.masterKeyEnvironmentFile;
       };
     }
   );
