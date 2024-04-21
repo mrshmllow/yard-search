@@ -47,8 +47,8 @@
 
           NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-          NEXT_PUBLIC_MEILISEARCH_URL = "";
-          NEXT_PUBLIC_MEILISEARCH_KEY = "";
+          NEXT_PUBLIC_MEILISEARCH_URL = "example.com";
+          NEXT_PUBLIC_MEILISEARCH_KEY = "thisisakey";
 
           # cp -r $PWD/public/ $out/out/
           installPhase = ''
@@ -68,6 +68,7 @@
             maintainers = with maintainers; [marshmallow];
           };
         };
+
         packages.default = config.packages.yard-search;
 
         devenv.shells.default = {
