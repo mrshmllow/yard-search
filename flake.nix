@@ -47,8 +47,8 @@
 
           NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-          NEXT_PUBLIC_MEILISEARCH_URL = "example.com";
-          NEXT_PUBLIC_MEILISEARCH_KEY = "thisisakey";
+          NEXT_PUBLIC_MEILISEARCH_URL = "https://meilisearch.jerma.fans";
+          NEXT_PUBLIC_MEILISEARCH_KEY = "feb70b6ea5a7601485404c4468e77a131c57e2fc686e4a2a86dbe485f8dde885";
 
           # cp -r $PWD/public/ $out/out/
           installPhase = ''
